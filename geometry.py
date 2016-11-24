@@ -109,6 +109,12 @@ class Vector2D:
     def __iter__(self):
         return [self.x, self.y].__iter__()
 
+    def dot(self, other):
+        if isinstance(other, Vector2D):
+            return self.x*other.x + self.y*other.y
+        else:
+            raise TypeError("Other must be a Vector2D")
+
     @staticmethod
     def create_from_angle(angle, length):
         """
@@ -125,16 +131,6 @@ class Vector2D:
     @staticmethod
     def zero():
         return Vector2D(0, 0)
-
-    @staticmethod
-    def dot(v1, v2):
-        """
-        Calculates the vector scalar product (dot product) of v1 and v2.
-        :param v1: Vector V1
-        :param v2: Vector V2
-        :return: Dot Product of the Vectors
-        """
-        return v1.x * v2.x + v1.y * v2.y
 
     @staticmethod
     def angle_between(v1, v2):
@@ -163,3 +159,122 @@ class Vector2D:
                 return angle if v2_angle <= v1_angle + math.pi else -angle
             else:
                 return -angle
+
+
+class Vector3D:
+
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def __add__(self, other):
+        if isinstance(other, Vector3D):
+            x = self.x + other.x
+            y = self.y + other.y
+            z = self.z + other.z
+            return Vector3D(x, y, z)
+        elif isinstance(other, Number):
+            x = self.x + other
+            y = self.y + other
+            z = self.z + other
+            return Vector3D(x, y, z)
+        else:
+            raise TypeError("Other must be a scalar or Vector3D")
+
+    def __sub__(self, other):
+        if isinstance(other, Vector3D):
+            x = self.x - other.x
+            y = self.y - other.y
+            z = self.z - other.z
+            return Vector3D(x, y, z)
+        elif isinstance(other, Number):
+            x = self.x - other
+            y = self.y - other
+            z = self.z - other
+            return Vector3D(x, y, z)
+        else:
+            raise TypeError("Other must be a scalar or Vector3D")
+
+    def __iadd__(self, other):
+        if isinstance(other, Vector3D):
+            self.x += other.x
+            self.y += other.y
+            self.z += other.z
+            return self
+        elif isinstance(other, Number):
+            self.x += other
+            self.y += other
+            self.z += other
+            return self
+        else:
+            raise TypeError("Other must be a scalar or Vector3D")
+
+    def __isub__(self, other):
+        if isinstance(other, Vector3D):
+            self.x -= other.x
+            self.y -= other.y
+            self.z -= other.z
+            return self
+        elif isinstance(other, Number):
+            self.x -= other
+            self.y -= other
+            self.z -= other
+            return self
+        else:
+            raise TypeError("Other must be a scalar or Vector3D")
+
+    def __eq__(self, other):
+        if isinstance(other, Vector3D):
+            return (self.x == other.x) and (self.y == other.y) and (self.z == other.z)
+        elif isinstance(other, list):
+            return (self.x == other[0]) and (self.y == other[1]) and (self.z == other[2])
+        else:
+            return False
+
+    def __neg__(self):
+        return Vector3D(-self.x, -self.y, -self.z)
+
+    # Scalar operations, other must be a scalar
+    def __mul__(self, other):
+        if not isinstance(other, Number):
+            raise TypeError("Other must be a scalar")
+        return Vector3D(other * self.x, other * self.y, other * self.z)
+
+    def __div__(self, other):
+        if not isinstance(other, Number):
+            raise TypeError("Other must be a scalar")
+        return Vector3D(self.x.__truediv__(other), self.y.__truediv__(other), self.z.__truediv__(other))
+
+    def __rmul__(self, other):
+        if not isinstance(other, Number):
+            raise TypeError("Other must be a scalar")
+        return Vector3D(other * self.x, other * self.y, other * self.z)
+
+    def __str__(self):
+        return str([self.x, self.y, self.z])
+
+    def __repr__(self):
+        return str([self.x, self.y, self.z])
+
+    def length(self):
+        return math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+
+    def __iter__(self):
+        return [self.x, self.y, self.z].__iter__()
+
+    def dot(self, other):
+        if isinstance(other, Vector3D):
+            return self.x*other.x + self.y*other.y + self.z*other.z
+        else:
+            raise TypeError("Other must be a Vector2D")
+
+    def cross(self, other):
+        if isinstance(other, Vector3D):
+            return Vector3D(self.y*other.z - self.z*other.y, self.z*other.x - self.x*other.z, self.x*other.y - self.y*other.x)
+        else:
+            raise TypeError("Other must be a Vector2D")
+
+    @staticmethod
+    def zero():
+        return Vector3D(0, 0, 0)

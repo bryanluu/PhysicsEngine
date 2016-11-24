@@ -25,10 +25,19 @@ class TestVector2D(unittest.TestCase):
         expected = geometry.Vector2D(0, 8)
         self.assertEqual(actual, expected)
 
+        actual = self.vectorQ1 + 3
+        expected = geometry.Vector2D(6, 7)
+        self.assertEqual(actual, expected)
+
     def testAdditionToSelf(self):
         actual = geometry.Vector2D.zero()
         actual += self.vectorQ1
         expected = geometry.Vector2D(3, 4)
+        self.assertEqual(actual, expected)
+
+        actual = geometry.Vector2D(3, 4)
+        actual += 3
+        expected = geometry.Vector2D(6, 7)
         self.assertEqual(actual, expected)
 
     def testSubtraction(self):
@@ -36,10 +45,19 @@ class TestVector2D(unittest.TestCase):
         expected = geometry.Vector2D(6, 0)
         self.assertEqual(actual, expected)
 
+        actual = self.vectorQ1 - 3
+        expected = geometry.Vector2D(0, 1)
+        self.assertEqual(actual, expected)
+
     def testSubtractionToSelf(self):
         actual = geometry.Vector2D.zero()
         actual -= self.vectorQ1
         expected = geometry.Vector2D(-3, -4)
+        self.assertEqual(actual, expected)
+
+        actual = geometry.Vector2D(3, 4)
+        actual -= 3
+        expected = geometry.Vector2D(0, 1)
         self.assertEqual(actual, expected)
 
     def testScalarMultiplication(self):
@@ -53,6 +71,16 @@ class TestVector2D(unittest.TestCase):
     def testScalarDivision(self):
         actual = self.vectorQ1 / 2
         expected = geometry.Vector2D(1.5, 2)
+        self.assertEqual(actual, expected)
+
+    def testLength(self):
+        actual = geometry.Vector2D(3, 4).length()
+        expected = 5
+        self.assertEqual(actual, expected)
+
+    def testDotProduct(self):
+        actual = self.vectorQ1.dot(self.vectorQ2)
+        expected = 7
         self.assertEqual(actual, expected)
 
     def testAngles(self):
@@ -139,3 +167,109 @@ class TestVector2D(unittest.TestCase):
         self.assertTrue(self.vectorQ2 == [-3, 4])
         self.assertTrue(self.vectorQ3 == [-1, -1])
         self.assertTrue(self.vectorQ4 == [6, -8])
+
+
+class TestVector3D(unittest.TestCase):
+
+    def setUp(self):
+        # Vectors in each quadrant
+        # Q1 is top right: x>0, y>0, and goes counter clockwise
+        self.vectorQ1 = geometry.Vector3D(2, 3, 4)
+        self.vectorQ2 = geometry.Vector3D(2, -3, 4)
+        self.vectorQ3 = geometry.Vector3D(-2, -1, -1)
+        self.vectorQ4 = geometry.Vector3D(-4, 6, -8)
+        self.vectors = [
+            self.vectorQ1, self.vectorQ2, self.vectorQ3, self.vectorQ4]
+
+    def testAdditionToZero(self):
+        for vector in self.vectors:
+            actual = vector + geometry.Vector3D.zero()
+            expected = vector
+            self.assertEqual(actual, expected)
+
+    def testAddition(self):
+        actual = self.vectorQ1 + self.vectorQ2
+        expected = geometry.Vector3D(4, 0, 8)
+        self.assertEqual(actual, expected)
+
+        actual = self.vectorQ1 + 3
+        expected = geometry.Vector3D(5, 6, 7)
+        self.assertEqual(actual, expected)
+
+    def testAdditionToSelf(self):
+        actual = geometry.Vector3D.zero()
+        actual += self.vectorQ1
+        expected = geometry.Vector3D(2, 3, 4)
+        self.assertEqual(actual, expected)
+
+        actual = geometry.Vector3D(2, 3, 4)
+        actual += 3
+        expected = geometry.Vector3D(5, 6, 7)
+        self.assertEqual(actual, expected)
+
+    def testSubtraction(self):
+        actual = self.vectorQ1 - self.vectorQ2
+        expected = geometry.Vector3D(0, 6, 0)
+        self.assertEqual(actual, expected)
+
+        actual = self.vectorQ1 - 3
+        expected = geometry.Vector3D(-1, 0, 1)
+        self.assertEqual(actual, expected)
+
+    def testSubtractionToSelf(self):
+        actual = geometry.Vector3D.zero()
+        actual -= self.vectorQ1
+        expected = geometry.Vector3D(-2, -3, -4)
+        self.assertEqual(actual, expected)
+
+        actual = geometry.Vector3D(2, 3, 4)
+        actual -= 3
+        expected = geometry.Vector3D(-1, 0, 1)
+        self.assertEqual(actual, expected)
+
+    def testScalarMultiplication(self):
+        actual = self.vectorQ1 * 2
+        expected = geometry.Vector3D(4, 6, 8)
+        self.assertEqual(actual, expected)
+
+        actual = 2 * self.vectorQ1
+        self.assertEqual(actual, expected)
+
+    def testScalarDivision(self):
+        actual = self.vectorQ1 / 2
+        expected = geometry.Vector3D(1, 1.5, 2)
+        self.assertEqual(actual, expected)
+
+    def testLength(self):
+        actual = self.vectorQ1.length()
+        expected = math.sqrt(2*2 + 3*3 + 4*4)
+        self.assertAlmostEqual(actual, expected)
+
+    def testDotProduct(self):
+        actual = self.vectorQ1.dot(self.vectorQ2)
+        expected = 11
+        self.assertEqual(actual, expected)
+
+    def testCrossProduct(self):
+        actual = geometry.Vector3D(1,0,0).cross(geometry.Vector3D(0,1,0))
+        expected = geometry.Vector3D(0,0,1)
+        self.assertEqual(actual, expected)
+
+        actual = geometry.Vector3D(0,1,0).cross(geometry.Vector3D(1,0,0))
+        expected = geometry.Vector3D(0,0,-1)
+        self.assertEqual(actual, expected)
+
+        actual = self.vectorQ1.cross(self.vectorQ2)
+        expected = geometry.Vector3D(24, 0, -12)
+        self.assertEqual(actual, expected)
+
+    # Also checks for immutability
+    def tearDown(self):
+        self.assertTrue(self.vectorQ1 == geometry.Vector3D(2, 3, 4))
+        self.assertTrue(self.vectorQ2 == geometry.Vector3D(2, -3, 4))
+        self.assertTrue(self.vectorQ3 == geometry.Vector3D(-2, -1, -1))
+        self.assertTrue(self.vectorQ4 == geometry.Vector3D(-4, 6, -8))
+        self.assertTrue(self.vectorQ1 == [2, 3, 4])
+        self.assertTrue(self.vectorQ2 == [2, -3, 4])
+        self.assertTrue(self.vectorQ3 == [-2, -1, -1])
+        self.assertTrue(self.vectorQ4 == [-4, 6, -8])
