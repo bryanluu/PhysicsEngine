@@ -1,4 +1,5 @@
 import math
+from numbers import Number
 
 class Vector2D:
 
@@ -7,24 +8,52 @@ class Vector2D:
         self.y = y
 
     def __add__(self, other):
-        x = self.x + other.x
-        y = self.y + other.y
-        return Vector2D(x, y)
+        if isinstance(other, Vector2D):
+            x = self.x + other.x
+            y = self.y + other.y
+            return Vector2D(x, y)
+        elif isinstance(other, Number):
+            x = self.x + other
+            y = self.y + other
+            return Vector2D(x, y)
+        else:
+            raise TypeError("Other must be a scalar or Vector2D")
 
     def __sub__(self, other):
-        x = self.x - other.x
-        y = self.y - other.y
-        return Vector2D(x, y)
+        if isinstance(other, Vector2D):
+            x = self.x - other.x
+            y = self.y - other.y
+            return Vector2D(x, y)
+        elif isinstance(other, Number):
+            x = self.x - other
+            y = self.y - other
+            return Vector2D(x, y)
+        else:
+            raise TypeError("Other must be a scalar or Vector2D")
 
     def __iadd__(self, other):
-        self.x += other.x
-        self.y += other.y
-        return self
+        if isinstance(other, Vector2D):
+            self.x += other.x
+            self.y += other.y
+            return self
+        elif isinstance(other, Number):
+            self.x += other
+            self.y += other
+            return self
+        else:
+            raise TypeError("Other must be a scalar or Vector2D")
 
     def __isub__(self, other):
-        self.x -= other.x
-        self.y -= other.y
-        return self
+        if isinstance(other, Vector2D):
+            self.x -= other.x
+            self.y -= other.y
+            return self
+        elif isinstance(other, Number):
+            self.x -= other
+            self.y -= other
+            return self
+        else:
+            raise TypeError("Other must be a scalar or Vector2D")
 
     def __eq__(self, other):
         if isinstance(other, Vector2D):
@@ -39,19 +68,25 @@ class Vector2D:
 
     # Scalar operations, other must be a scalar
     def __mul__(self, other):
+        if not isinstance(other, Number):
+            raise TypeError("Other must be a scalar")
         return Vector2D(other * self.x, other * self.y)
 
     def __div__(self, other):
+        if not isinstance(other, Number):
+            raise TypeError("Other must be a scalar")
         return Vector2D(self.x.__truediv__(other), self.y.__truediv__(other))
 
     def __rmul__(self, other):
+        if not isinstance(other, Number):
+            raise TypeError("Other must be a scalar")
         return Vector2D(other * self.x, other * self.y)
 
     def __str__(self):
         return str([self.x, self.y])
 
     def __repr__(self):
-        return [self.x, self.y]
+        return str([self.x, self.y])
 
     def length(self):
         return math.sqrt(self.x * self.x + self.y * self.y)
@@ -70,6 +105,9 @@ class Vector2D:
         angle = math.atan2(self.y, self.x)
 
         return angle
+
+    def __iter__(self):
+        return [self.x, self.y].__iter__()
 
     @staticmethod
     def create_from_angle(angle, length):
