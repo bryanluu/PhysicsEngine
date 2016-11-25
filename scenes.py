@@ -31,6 +31,8 @@ class BallScene(SceneBase):
         SceneBase.__init__(self)
         self.v = geo.Vector2D.zero()
         self.a = geo.Vector2D(0, 1)
+        self.elasticity = 0.8
+        self.friction = 0.1
 
     def initGraphics(self, screen):
         self.screen = screen
@@ -51,7 +53,9 @@ class BallScene(SceneBase):
 
         # follow mouse drag
         if click[0]:
-            self.v = geo.Vector2D.zero()
+            currentPos = geo.Vector2D(*mouse)
+            self.v = currentPos - self.lastPos
+            self.lastPos = currentPos
             self.ballrect.center = mouse
             if self.ballrect.left < 0:
                 self.ballrect.left = 0
@@ -62,19 +66,25 @@ class BallScene(SceneBase):
             if self.ballrect.bottom > screenHeight:
                 self.ballrect.bottom = screenHeight
         else:
+            self.lastPos = geo.Vector2D(*mouse)
             self.v += self.a
             self.ballrect.move_ip(*self.v)
             if self.ballrect.left < 0:
-                self.v.x = -self.v.x
+                self.v.x = -self.v.x * self.elasticity
                 self.ballrect.left = 0
             if self.ballrect.right > screenWidth:
-                self.v.x = -self.v.x
+                self.v.x = -self.v.x * self.elasticity
                 self.ballrect.right = screenWidth
             if self.ballrect.top < 0:
-                self.v.y = -self.v.y
+                self.v.y = -self.v.y * self.elasticity
                 self.ballrect.top = 0
             if self.ballrect.bottom > screenHeight:
-                self.v.y = -self.v.y
+                self.v.y = int(-self.v.y * self.elasticity)
+                if self.v.x > 0:
+                    self.v.x = int(self.v.x - self.friction)
+                elif self.v.x < 0:
+                    self.v.x = int(self.v.x + self.friction)
+
                 self.ballrect.bottom = screenHeight
 
     def Render(self, screen):

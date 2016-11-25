@@ -18,7 +18,7 @@ def run_game(width, height, fps, starting_scene):
     initialized = False
 
     while active_scene != None:
-        
+
         if not initialized:
             active_scene.initGraphics(screen)
             initialized = True

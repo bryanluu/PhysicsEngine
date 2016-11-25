@@ -115,6 +115,9 @@ class Vector2D:
         else:
             raise TypeError("Other must be a Vector2D")
 
+    def copy(self):
+        return Vector2D(self.x, self.y)
+
     @staticmethod
     def create_from_angle(angle, length):
         """

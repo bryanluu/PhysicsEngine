@@ -83,6 +83,13 @@ class TestVector2D(unittest.TestCase):
         expected = 7
         self.assertEqual(actual, expected)
 
+    def testCopy(self):
+        actual = self.vectorQ1.copy()
+        actual += 3
+        expected = geometry.Vector2D(6, 7)
+        self.assertEqual(actual, expected)
+        self.assertNotEqual(actual, self.vectorQ1)
+
     def testAngles(self):
         north = geometry.Vector2D(0, 1)
         south = geometry.Vector2D(0, -1)
