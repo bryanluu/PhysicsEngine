@@ -15,7 +15,14 @@ def run_game(width, height, fps, starting_scene):
 
     active_scene = starting_scene
 
+    initialized = False
+
     while active_scene != None:
+        
+        if not initialized:
+            active_scene.initGraphics(screen)
+            initialized = True
+
         pressed_keys = pygame.key.get_pressed()
 
         # Event filtering
