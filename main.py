@@ -1,11 +1,12 @@
 import pygame
 from scenes import *
+import os
 
 # -------- For PiTFT calibration --------
-# os.environ['SDL_VIDEODRIVER'] = 'fbcon'
-# os.environ["SDL_FBDEV"] = "/dev/fb1"
-# os.environ["SDL_MOUSEDEV"] = "/dev/input/touchscreen"
-# os.environ["SDL_MOUSEDRV"] = "TSLIB"
+os.environ['SDL_VIDEODRIVER'] = 'fbcon'
+os.environ["SDL_FBDEV"] = "/dev/fb1"
+os.environ["SDL_MOUSEDEV"] = "/dev/input/touchscreen"
+os.environ["SDL_MOUSEDRV"] = "TSLIB"
 
 
 def run_game(width, height, fps, starting_scene):
